@@ -111,3 +111,137 @@ l1.delete_at(4)
 l1.print_list()
 print('Length of the List:',l1.len())
 l1.search(15)
+#doubly linked liset
+class Node:
+    def __init__(self, data, next=None, prev=None):
+        self.data = data
+        self.next = next
+        self.prev = prev
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def insert_front(self, data):
+        node = Node(data, next=self.head, prev=None)
+        if self.head is not None:
+            self.head.prev = node
+        self.head = node
+        if self.tail is None:
+            self.tail = node
+
+    def insert_end(self, data):
+        if self.head is None:
+            self.insert_front(data)
+            return
+        node = Node(data, next=None, prev=self.tail)
+        self.tail.next = node
+        self.tail = node
+
+    def lent(self):
+        count = 0
+        itr = self.head
+        while itr:
+            itr = itr.next
+            count += 1
+        return count
+
+    def insert_at(self, data, index):
+        if index < 0 or index > self.lent():
+            print("invalid index")
+            return
+        if index == 0:
+            self.insert_front(data)
+            return
+        if index == self.lent():
+            self.insert_end(data)
+            return
+
+        itr = self.head
+        count = 0
+        while count < index - 1:
+            itr = itr.next
+            count += 1
+        node = Node(data, next=itr.next, prev=itr)
+        itr.next.prev = node
+        itr.next = node
+
+    def del_front(self):
+        if self.head is None:
+            print('empty')
+            return
+        self.head = self.head.next
+        if self.head is not None:
+            self.head.prev = None
+        else:
+            self.tail = None
+
+    def del_end(self):
+        if self.tail is None:
+            print('empty')
+            return
+        self.tail = self.tail.prev
+        if self.tail is not None:
+            self.tail.next = None
+        else:
+            self.head = None
+
+    def del_at(self, index):
+        if self.head is None:
+            print('empty')
+            return
+        if index < 0 or index >= self.lent():
+            print("invalid index")
+            return
+        if index == 0:
+            self.del_front()
+            return
+        if index == self.lent() - 1:
+            self.del_end()
+            return
+
+        itr = self.head
+        count = 0
+        while count < index:
+            itr = itr.next
+            count += 1
+        itr.prev.next = itr.next
+        itr.next.prev = itr.prev
+
+    def print_list(self):
+        if self.head is None:
+            print('empty')
+            return
+        itr = self.head
+        res = []
+        while itr:
+            res.append(itr.data)
+            itr = itr.next
+        print(res)
+
+    def print_reverse(self):
+        if self.tail is None:
+            print('empty')
+            return
+        itr = self.tail
+        res = []
+        while itr:
+            res.append(itr.data)
+            itr = itr.prev
+        print(res)
+
+
+l1 = DoublyLinkedList()
+l1.insert_front(20)
+l1.insert_front(10)
+l1.insert_end(30)
+l1.insert_end(40)
+l1.print_list()
+l1.print_reverse()
+l1.insert_at(25, 2)
+l1.print_list()
+l1.del_at(0)
+l1.print_list()
+l1.del_end()
+l1.print_list()
